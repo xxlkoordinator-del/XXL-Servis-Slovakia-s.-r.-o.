@@ -4,9 +4,8 @@ import { Layout } from './components/Layout';
 import { InventoryTable } from './components/InventoryTable';
 import { ScannerModal } from './components/ScannerModal';
 import { AddItemModal } from './components/AddItemModal';
-import { PairingModal } from './components/PairingModal';
 import { InventoryItem, ScanHistoryEntry, StorageKey } from './types';
-import { Plus, Scan, History, Package, Search, Cloud, CloudOff, Smartphone, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Plus, Scan, History, Package, Search, Cloud, CloudOff, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const generateId = () => {
   try {
@@ -43,7 +42,6 @@ const App: React.FC = () => {
   
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [isPairingModalOpen, setIsPairingModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'inventory' | 'history'>('inventory');
   const [isSyncing, setIsSyncing] = useState(false);
@@ -127,7 +125,6 @@ const App: React.FC = () => {
   const handleScanSuccess = useCallback((scannedText: string) => {
     let cleanScanned = scannedText.trim();
     try {
-      // Ak je naskenovaná celá URL, vytiahneme z nej len SKU
       if (cleanScanned.includes('?')) {
         const url = new URL(cleanScanned);
         const skuParam = url.searchParams.get('scan');
@@ -165,7 +162,6 @@ const App: React.FC = () => {
         setScanToast({ type: result.success ? 'success' : 'error', message: result.message });
         setTimeout(() => setScanToast(null), 4000);
         
-        // Vyčistenie URL parametra scan po úspešnom načítaní
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.delete('scan');
         window.history.replaceState({}, '', newUrl.toString());
@@ -222,13 +218,6 @@ const App: React.FC = () => {
               )}
             </div>
           </div>
-          <button 
-            onClick={() => setIsPairingModalOpen(true)}
-            className="flex items-center space-x-2 px-4 py-3 bg-white border border-slate-200 rounded-2xl shadow-sm active:scale-95 transition hover:bg-slate-50"
-          >
-            <Smartphone className="w-5 h-5 text-indigo-600" />
-            <span className="text-xs font-black text-slate-700 uppercase tracking-tight">Párovať</span>
-          </button>
         </header>
 
         <div className="flex space-x-1 mb-6 p-1 bg-slate-200/50 rounded-2xl">
@@ -307,7 +296,6 @@ const App: React.FC = () => {
 
       <ScannerModal isOpen={isScannerOpen} onClose={() => setIsScannerOpen(false)} onScan={handleScanSuccess} />
       <AddItemModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} onAdd={addItem} />
-      <PairingModal isOpen={isPairingModalOpen} onClose={() => setIsPairingModalOpen(false)} syncId={syncId} />
     </Layout>
   );
 };
