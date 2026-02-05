@@ -1,0 +1,7 @@
+{
+  "name": "QR Sklad - Inteligentný Skladový Systém",
+  "description": "Moderný systém na správu skladu pomocou QR kódov. Umožňuje jednoduché odpisovanie tovaru naskenovaním kódu priamo z telefónu.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
